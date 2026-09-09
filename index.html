@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>POCs & Security Research</title>
-    <link rel="stylesheet" href="/poc.github.io/assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
     <div class="container">
         <header>
             <nav>
-                <a href="/poc.github.io/">🏠 Inicio</a>
-                <a href="/poc.github.io/search.html">🔍 Buscar</a>
+                <a href="index.html">🏠 Inicio</a>
+                <a href="search.html">🔍 Buscar</a>
                 <a href="https://github.com/botache500">📂 GitHub</a>
             </nav>
         </header>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="search-container" style="background: var(--bg-secondary); padding: 30px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 40px;">
-            <input type="text" id="search-input" placeholder="🔍 Buscar por CVE, herramienta, sistema..." oninput="searchPosts(this.value)" style="width: 100%; padding: 15px; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 1.2rem; border-radius: 4px; font-family: inherit;">
+            <input type="text" id="search-input" placeholder="🔍 Buscar por CVE, herramienta, sistema..." style="width: 100%; padding: 15px; background: var(--bg-primary); border: 1px solid var(--border-color); color: var(--text-primary); font-size: 1.2rem; border-radius: 4px; font-family: inherit;">
             <div id="search-results" style="margin-top: 15px;"></div>
         </div>
 
@@ -50,97 +50,6 @@
         </footer>
     </div>
 
-    <script src="/poc.github.io/assets/js/main.js"></script>
-    <script>
-        // ============================================
-        // FUNCIONES DE RENDERIZADO
-        // ============================================
-
-        function renderPosts(postsToShow) {
-            const container = document.getElementById('posts-container');
-            if (!container) return;
-
-            if (postsToShow.length === 0) {
-                container.innerHTML = `<p style="text-align: center; color: var(--text-secondary); padding: 40px 0;">📝 No hay POCs disponibles.</p>`;
-                return;
-            }
-
-            container.innerHTML = postsToShow.map(post => `
-                <article class="post-preview">
-                    <h3><a href="${post.url}">${post.title}</a></h3>
-                    <div class="post-meta">
-                        <span class="date">📅 ${post.date}</span>
-                        <span class="category">🏷️ ${post.categories.join(', ')}</span>
-                        ${post.cve ? `<span class="cve-badge">🔴 ${post.cve}</span>` : ''}
-                    </div>
-                    <p>${post.excerpt}</p>
-                    <div class="tags">
-                        ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
-                    </div>
-                </article>
-            `).join('');
-        }
-
-        // ============================================
-        // FUNCIONES DE BÚSQUEDA Y FILTROS
-        // ============================================
-
-        function searchPosts(query) {
-            const q = query.toLowerCase().trim();
-            const resultsContainer = document.getElementById('search-results');
-            const allPosts = window.pocList || [];
-
-            if (!q) {
-                resultsContainer.innerHTML = '';
-                renderPosts(allPosts);
-                return;
-            }
-
-            const results = allPosts.filter(post => {
-                const searchable = [
-                    post.title,
-                    post.excerpt,
-                    ...post.tags,
-                    ...post.categories,
-                    post.cve || ''
-                ].join(' ').toLowerCase();
-                return searchable.includes(q);
-            });
-
-            renderPosts(results);
-
-            if (results.length === 0) {
-                resultsContainer.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 20px; border: 1px solid var(--border-color); margin-top: 20px;">🔍 No se encontraron resultados para "${q}"</div>`;
-            } else {
-                resultsContainer.innerHTML = `<div style="background: rgba(0,255,65,0.05); border: 1px solid var(--border-color); padding: 10px; margin-top: 20px; text-align: center; color: var(--text-secondary);">🎯 ${results.length} resultados encontrados</div>`;
-            }
-        }
-
-        function filterCategory(category) {
-            document.getElementById('search-input').value = '';
-            document.getElementById('search-results').innerHTML = '';
-            const allPosts = window.pocList || [];
-            const results = allPosts.filter(post =>
-                post.categories.some(c => c.toLowerCase().includes(category.toLowerCase()))
-            );
-            renderPosts(results);
-        }
-
-        function showAllPosts() {
-            document.getElementById('search-input').value = '';
-            document.getElementById('search-results').innerHTML = '';
-            const allPosts = window.pocList || [];
-            renderPosts(allPosts);
-        }
-
-        // ============================================
-        // INICIALIZACIÓN
-        // ============================================
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const allPosts = window.pocList || [];
-            renderPosts(allPosts);
-        });
-    </script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>
