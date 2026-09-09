@@ -3,46 +3,329 @@ layout: default
 title: Inicio
 ---
 
-<div class="hero">
-    <h1>🔒 Security Research & POCs</h1>
-    <p>Investigación de vulnerabilidades • Pruebas de concepto • Writeups técnicos</p>
-</div>
+<style>
+:root {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --text-primary: #00ff41;
+    --text-secondary: #00cc33;
+    --border-color: #00ff41;
+}
 
-<div class="search-container">
-    <input type="text" id="search-input" placeholder="🔍 Buscar por CVE, herramienta, sistema...">
-    <div id="search-results"></div>
-</div>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-<div class="categories">
-    <h2>Categorías</h2>
-    <div class="category-grid">
-        <a href="#windows" class="category-tag">🪟 Windows</a>
-        <a href="#linux" class="category-tag">🐧 Linux</a>
-        <a href="#web" class="category-tag">🌐 Web</a>
-        <a href="#api" class="category-tag">🔌 API</a>
-        <a href="#ad" class="category-tag">🏢 Active Directory</a>
-        <a href="#cve" class="category-tag">⚠️ CVEs</a>
+body {
+    font-family: 'Consolas', 'Courier New', monospace;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    padding: 20px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.hero {
+    text-align: center;
+    padding: 60px 20px;
+    border-bottom: 2px solid var(--border-color);
+    margin-bottom: 40px;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    color: var(--text-primary);
+    text-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+}
+
+.search-container {
+    background: var(--bg-secondary);
+    padding: 30px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 40px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 15px;
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    border-radius: 4px;
+    font-family: inherit;
+}
+
+#search-input:focus {
+    outline: none;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+}
+
+.category-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.category-tag {
+    background: var(--bg-secondary);
+    padding: 15px;
+    text-align: center;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    color: var(--text-primary);
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.category-tag:hover {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+    transform: translateY(-2px);
+}
+
+.post-preview {
+    background: var(--bg-secondary);
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--border-color);
+}
+
+.post-preview h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+.post-preview h3 a:hover {
+    text-decoration: underline;
+}
+
+.post-meta {
+    display: flex;
+    gap: 20px;
+    margin: 10px 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.tag {
+    background: rgba(0, 255, 65, 0.1);
+    padding: 4px 12px;
+    border-radius: 15px;
+    font-size: 0.8rem;
+    border: 1px solid rgba(0, 255, 65, 0.3);
+}
+
+.cve-badge {
+    display: inline-block;
+    background: #ff0000;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: bold;
+    margin: 10px 0;
+}
+
+.post-content {
+    margin: 30px 0;
+}
+
+.post-content h2 {
+    color: var(--text-primary);
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 10px;
+    margin: 30px 0 20px 0;
+}
+
+.post-content pre {
+    background: var(--bg-primary);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    overflow-x: auto;
+    position: relative;
+    margin: 20px 0;
+}
+
+.post-content code {
+    color: var(--text-primary);
+    font-family: 'Consolas', 'Courier New', monospace;
+}
+
+.post-content img {
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    margin: 20px 0;
+}
+
+.copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 255, 65, 0.1);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 4px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.3s;
+}
+
+.copy-btn:hover {
+    background: var(--text-primary);
+    color: var(--bg-primary);
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+    .category-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+</style>
+
+<div class="container">
+    <div class="hero">
+        <h1>🔒 Security Research & POCs</h1>
+        <p>Investigación de vulnerabilidades • Pruebas de concepto • Writeups técnicos</p>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search-input" placeholder="🔍 Buscar por CVE, herramienta, sistema...">
+        <div id="search-results"></div>
+    </div>
+
+    <div class="categories">
+        <h2>Categorías</h2>
+        <div class="category-grid">
+            <a href="#windows" class="category-tag">🪟 Windows</a>
+            <a href="#linux" class="category-tag">🐧 Linux</a>
+            <a href="#web" class="category-tag">🌐 Web</a>
+            <a href="#api" class="category-tag">🔌 API</a>
+            <a href="#ad" class="category-tag">🏢 Active Directory</a>
+            <a href="#cve" class="category-tag">⚠️ CVEs</a>
+        </div>
+    </div>
+
+    <div class="recent-posts">
+        <h2>Últimos POCs publicados</h2>
+        {% for post in site.posts limit:10 %}
+        <article class="post-preview" data-title="{{ post.title }}" data-excerpt="{{ post.excerpt }}" data-tags="{{ post.tags | join: ' ' }}" data-category="{{ post.categories | join: ' ' }}">
+            <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+            <div class="post-meta">
+                <span class="date">📅 {{ post.date | date: "%d/%m/%Y" }}</span>
+                <span class="category">🏷️ {{ post.categories | join: ", " }}</span>
+                {% if post.cve %}
+                <span class="cve">🔴 {{ post.cve }}</span>
+                {% endif %}
+            </div>
+            <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
+            <div class="tags">
+                {% for tag in post.tags %}
+                <span class="tag">#{{ tag }}</span>
+                {% endfor %}
+            </div>
+        </article>
+        {% else %}
+        <p style="text-align: center; color: var(--text-secondary); padding: 40px 0;">
+            📝 No hay posts aún. Crea tu primer POC en la carpeta _posts/
+        </p>
+        {% endfor %}
     </div>
 </div>
 
-<div class="recent-posts">
-    <h2>Últimos POCs publicados</h2>
-    {% for post in site.posts limit:5 %}
-    <article class="post-preview">
-        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-        <div class="post-meta">
-            <span class="date">📅 {{ post.date | date: "%d/%m/%Y" }}</span>
-            <span class="category">🏷️ {{ post.categories | join: ", " }}</span>
-        </div>
-        <p>{{ post.excerpt }}</p>
-        <div class="tags">
-            {% for tag in post.tags %}
-            <span class="tag">#{{ tag }}</span>
-            {% endfor %}
-        </div>
-    </article>
-    {% endfor %}
-</div>
+<script>
+// Sistema de búsqueda en tiempo real
+const searchInput = document.getElementById('search-input');
+const resultsContainer = document.getElementById('search-results');
+let allPosts = [];
 
-<!-- Incluir JavaScript de búsqueda -->
-<script src="{{ '/assets/js/search.js' | relative_url }}"></script>
+function indexPosts() {
+    const postElements = document.querySelectorAll('.post-preview');
+    allPosts = Array.from(postElements).map(el => {
+        const title = el.dataset.title || el.querySelector('h3 a')?.textContent || '';
+        const excerpt = el.dataset.excerpt || el.querySelector('p')?.textContent || '';
+        const tags = (el.dataset.tags || '').split(' ');
+        const link = el.querySelector('h3 a')?.href || '';
+        const category = el.dataset.category || '';
+        return { title, excerpt, tags, link, category, element: el };
+    });
+}
+
+function search(query) {
+    query = query.toLowerCase().trim();
+    
+    if (!query) {
+        resultsContainer.innerHTML = '';
+        allPosts.forEach(p => p.element.style.display = 'block');
+        return;
+    }
+    
+    const results = allPosts.filter(post => {
+        const searchable = [
+            post.title,
+            post.excerpt,
+            ...post.tags,
+            post.category
+        ].join(' ').toLowerCase();
+        return searchable.includes(query);
+    });
+    
+    displayResults(results);
+}
+
+function displayResults(results) {
+    if (results.length === 0) {
+        resultsContainer.innerHTML = `
+            <div class="result-item" style="text-align: center; color: var(--text-secondary); padding: 20px; border: 1px solid var(--border-color); margin-top: 20px;">
+                🔍 No se encontraron resultados para "${searchInput.value}"
+            </div>
+        `;
+        return;
+    }
+    
+    allPosts.forEach(p => p.element.style.display = 'none');
+    results.forEach((result, index) => {
+        result.element.style.display = 'block';
+        if (index === 0) {
+            result.element.style.borderLeft = '4px solid #00ff41';
+        }
+    });
+    
+    resultsContainer.innerHTML = `
+        <div class="result-item" style="background: rgba(0,255,65,0.05); border: 1px solid var(--border-color); padding: 10px; margin-top: 20px; text-align: center;">
+            🎯 ${results.length} resultados encontrados
+        </div>
+    `;
+}
+
+if (searchInput) {
+    searchInput.addEventListener('input', function(e) {
+        search(this.value);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', indexPosts);
+</script>
