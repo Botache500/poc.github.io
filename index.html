@@ -51,6 +51,14 @@ title: Inicio
     {% endfor %}
 </div>
 
+<!-- DEBUG: Ver cuántos posts hay -->
+<div style="background: #00ff4120; padding: 10px; border: 1px solid #00ff41; margin: 10px 0; border-radius: 4px;">
+    <strong>🔍 DEBUG:</strong> Número de posts: {{ site.posts | size }}
+    {% for post in site.posts %}
+    <div>✅ {{ post.title }}</div>
+    {% endfor %}
+</div>
+
 <style>
 :root {
     --bg-primary: #0a0a0a;
