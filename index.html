@@ -1,259 +1,552 @@
----
-layout: default
-title: Inicio
----
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POCs & Security Research</title>
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #1a1a1a;
+            --text-primary: #00ff41;
+            --text-secondary: #00cc33;
+            --border-color: #00ff41;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Consolas', 'Courier New', monospace;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        header {
+            padding: 20px 0;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 30px;
+        }
+        nav {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s;
+        }
+        nav a:hover {
+            color: var(--text-secondary);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        .hero {
+            text-align: center;
+            padding: 60px 20px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--text-primary);
+            text-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
+        }
+        .hero p {
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+            margin-top: 10px;
+        }
+        .search-container {
+            background: var(--bg-secondary);
+            padding: 30px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 40px;
+        }
+        #search-input {
+            width: 100%;
+            padding: 15px;
+            background: var(--bg-primary);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            border-radius: 4px;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        #search-input:focus {
+            outline: none;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
+        }
+        #search-results {
+            margin-top: 15px;
+        }
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0 40px 0;
+        }
+        .category-tag {
+            background: var(--bg-secondary);
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: all 0.3s;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .category-tag:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            transform: translateY(-2px);
+        }
+        .post-preview {
+            background: var(--bg-secondary);
+            padding: 25px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            border-left: 4px solid var(--border-color);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .post-preview:hover {
+            border-left-color: var(--text-secondary);
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.05);
+        }
+        .post-preview h3 {
+            margin-bottom: 10px;
+        }
+        .post-preview h3 a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s;
+        }
+        .post-preview h3 a:hover {
+            text-decoration: underline;
+            color: var(--text-secondary);
+        }
+        .post-meta {
+            display: flex;
+            gap: 20px;
+            margin: 10px 0;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .tag {
+            background: rgba(0, 255, 65, 0.1);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+        }
+        .cve-badge {
+            display: inline-block;
+            background: #ff0000;
+            color: #fff;
+            padding: 2px 10px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+        }
+        .post-content {
+            margin: 30px 0;
+        }
+        .post-content h2 {
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+            margin: 30px 0 20px 0;
+        }
+        .post-content h3 {
+            color: var(--text-secondary);
+            margin: 25px 0 15px 0;
+        }
+        .post-content ul, .post-content ol {
+            margin: 15px 0 15px 30px;
+        }
+        .post-content li {
+            margin: 5px 0;
+        }
+        .post-content pre {
+            background: var(--bg-primary);
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid rgba(0, 255, 65, 0.3);
+            overflow-x: auto;
+            position: relative;
+            margin: 20px 0;
+        }
+        .post-content code {
+            color: var(--text-primary);
+            font-family: 'Consolas', 'Courier New', monospace;
+        }
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            margin: 20px 0;
+        }
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(0, 255, 65, 0.1);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 4px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            font-size: 0.8rem;
+        }
+        .copy-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+        }
+        .back-btn {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+            margin-top: 20px;
+        }
+        .back-btn:hover {
+            background: var(--text-primary);
+            color: var(--bg-primary);
+        }
+        footer {
+            text-align: center;
+            padding: 40px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 40px;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        .hidden {
+            display: none !important;
+        }
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .hero p {
+                font-size: 1rem;
+            }
+            .category-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .post-meta {
+                flex-direction: column;
+                gap: 5px;
+            }
+            nav {
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="/poc.github.io/">🏠 Inicio</a>
+                <a href="/poc.github.io/search.html">🔍 Buscar</a>
+                <a href="https://github.com/botache500">📂 GitHub</a>
+            </nav>
+        </header>
 
-<div class="hero">
-    <h1>🔒 Security Research & POCs</h1>
-    <p>Investigación de vulnerabilidades • Pruebas de concepto • Writeups técnicos</p>
-</div>
+        <!-- HERO -->
+        <div class="hero">
+            <h1>🔒 Security Research & POCs</h1>
+            <p>Investigación de vulnerabilidades • Pruebas de concepto • Writeups técnicos</p>
+        </div>
 
-<div class="search-container">
-    <input type="text" id="search-input" placeholder="🔍 Buscar por CVE, herramienta, sistema...">
-    <div id="search-results"></div>
-</div>
+        <!-- BUSCADOR -->
+        <div class="search-container">
+            <input type="text" id="search-input" placeholder="🔍 Buscar por CVE, herramienta, sistema..." oninput="searchPosts(this.value)">
+            <div id="search-results"></div>
+        </div>
 
-<div class="categories">
-    <h2>Categorías</h2>
-    <div class="category-grid">
-        <a href="#windows" class="category-tag">🪟 Windows</a>
-        <a href="#linux" class="category-tag">🐧 Linux</a>
-        <a href="#web" class="category-tag">🌐 Web</a>
-        <a href="#api" class="category-tag">🔌 API</a>
-        <a href="#ad" class="category-tag">🏢 Active Directory</a>
-        <a href="#cve" class="category-tag">⚠️ CVEs</a>
+        <!-- CATEGORÍAS -->
+        <div class="categories">
+            <h2>Categorías</h2>
+            <div class="category-grid">
+                <button class="category-tag" onclick="filterCategory('windows')">🪟 Windows</button>
+                <button class="category-tag" onclick="filterCategory('linux')">🐧 Linux</button>
+                <button class="category-tag" onclick="filterCategory('web')">🌐 Web</button>
+                <button class="category-tag" onclick="filterCategory('api')">🔌 API</button>
+                <button class="category-tag" onclick="filterCategory('ad')">🏢 Active Directory</button>
+                <button class="category-tag" onclick="filterCategory('cve')">⚠️ CVEs</button>
+                <button class="category-tag" onclick="showAllPosts()">📋 Todos</button>
+            </div>
+        </div>
+
+        <!-- POSTS -->
+        <div class="recent-posts">
+            <h2>Últimos POCs publicados</h2>
+            <div id="posts-container"></div>
+        </div>
+
+        <footer>
+            <p>POCs & Security Research es mantenido por botache500</p>
+            <p>⚡ Generado con GitHub Pages</p>
+        </footer>
     </div>
-</div>
 
-<div class="recent-posts">
-    <h2>Últimos POCs publicados</h2>
-    {% for post in site.pocs limit:10 %}
-    <article class="post-preview" data-title="{{ post.title }}" data-excerpt="{{ post.excerpt | strip_html }}" data-tags="{{ post.tags | join: ' ' }}" data-category="{{ post.categories | join: ' ' }}">
-        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
-        <div class="post-meta">
-            <span class="date">📅 {{ post.date | date: "%d/%m/%Y" }}</span>
-            <span class="category">🏷️ {{ post.categories | join: ", " }}</span>
-            {% if post.cve %}
-            <span class="cve">🔴 {{ post.cve }}</span>
-            {% endif %}
-        </div>
-        <p>{{ post.excerpt | strip_html | truncatewords: 30 }}</p>
-        <div class="tags">
-            {% for tag in post.tags %}
-            <span class="tag">#{{ tag }}</span>
-            {% endfor %}
-        </div>
-    </article>
-    {% else %}
-    <p style="text-align: center; color: var(--text-secondary); padding: 40px 0;">
-        📝 No hay posts aún. Crea tu primer POC en la carpeta _posts/
-    </p>
-    {% endfor %}
-</div>
+    <script>
+        // ============================================
+        // DATOS DE LOS POSTS (¡AÑADE AQUÍ TUS POCs!)
+        // ============================================
+        const posts = [
+            {
+                id: 1,
+                title: "CVE-2024-1234 - Escalada de Privilegios en Windows",
+                date: "15/09/2026",
+                categories: ["Windows", "CVE"],
+                tags: ["windows", "privesc", "kernel", "cve-2024-1234"],
+                cve: "CVE-2024-1234",
+                excerpt: "Explotación de una vulnerabilidad en el kernel de Windows que permite escalar privilegios de usuario a SYSTEM.",
+                content: `
+                    <h2>📋 Descripción</h2>
+                    <p>Esta vulnerabilidad afecta al componente <strong>Windows Kernel</strong> y permite a un atacante local escalar privilegios de un usuario normal a <strong>NT AUTHORITY\\SYSTEM</strong>.</p>
 
-<!-- DEBUG: Ver cuántos posts hay -->
-<div style="background: #00ff4120; padding: 10px; border: 1px solid #00ff41; margin: 10px 0; border-radius: 4px;">
-    <strong>🔍 DEBUG:</strong> Número de posts: {{ site.posts | size }}
-    {% for post in site.posts %}
-    <div>✅ {{ post.title }}</div>
-    {% endfor %}
-</div>
+                    <h3>🔍 Detalles técnicos</h3>
+                    <ul>
+                        <li><strong>CVE</strong>: CVE-2024-1234</li>
+                        <li><strong>Sistemas afectados</strong>: Windows 10/11 (versiones 21H2 - 23H2)</li>
+                        <li><strong>Tipo</strong>: Elevación de Privilegios</li>
+                        <li><strong>Gravedad</strong>: 7.8 (Alta)</li>
+                    </ul>
 
-<style>
-:root {
-    --bg-primary: #0a0a0a;
-    --bg-secondary: #1a1a1a;
-    --text-primary: #00ff41;
-    --text-secondary: #00cc33;
-    --border-color: #00ff41;
-}
+                    <h2>🛠️ Laboratorio</h2>
+                    <h3>Configuración necesaria</h3>
+                    <p><strong>Máquina objetivo:</strong></p>
+                    <ul>
+                        <li>Windows 10 22H2</li>
+                        <li>Usuario: testuser</li>
+                        <li>Sin parches de seguridad</li>
+                    </ul>
+                    <p><strong>Atacante:</strong></p>
+                    <ul>
+                        <li>Kali Linux 2024.1</li>
+                    </ul>
 
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+                    <h2>💥 Explotación paso a paso</h2>
+                    <h3>Paso 1: Verificar permisos</h3>
+                    <pre><code>whoami /priv</code></pre>
+                    <p>Debe mostrar <code>SE_PRIVILEGE_ENABLED</code> para el privilegio SeImpersonatePrivilege.</p>
 
-body {
-    font-family: 'Consolas', 'Courier New', monospace;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    line-height: 1.6;
-    padding: 20px;
-}
+                    <h3>Paso 2: Compilar el exploit</h3>
+                    <pre><code>gcc -o exploit.exe exploit.c -lws2_32</code></pre>
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-}
+                    <h3>Paso 3: Ejecutar el exploit</h3>
+                    <pre><code>.\\exploit.exe</code></pre>
 
-.hero {
-    text-align: center;
-    padding: 60px 20px;
-    border-bottom: 2px solid var(--border-color);
-    margin-bottom: 40px;
-}
+                    <h3>Resultado esperado</h3>
+                    <pre><code>[*] Iniciando exploit...
+                    [+] Token duplicado exitosamente
+                    [+] Shell SYSTEM obtenida</code></pre>
 
-.hero h1 {
-    font-size: 3rem;
-    color: var(--text-primary);
-    text-shadow: 0 0 20px rgba(0, 255, 65, 0.3);
-}
+                    <h2>📸 Evidencia</h2>
+                    <img src="https://via.placeholder.com/800x400/0a0a0a/00ff41?text=Exploit+en+ejecución" alt="Exploit en ejecución">
 
-.search-container {
-    background: var(--bg-secondary);
-    padding: 30px;
-    border-radius: 8px;
-    border: 1px solid var(--border-color);
-    margin-bottom: 40px;
-}
+                    <h2>🛡️ Mitigación</h2>
+                    <ol>
+                        <li>Aplicar el parche KB5012345 de Microsoft</li>
+                        <li>Deshabilitar la cuenta de invitado</li>
+                        <li>Limitar los permisos de usuarios locales</li>
+                        <li>Implementar LSA Protection</li>
+                    </ol>
 
-#search-input {
-    width: 100%;
-    padding: 15px;
-    background: var(--bg-primary);
-    border: 1px solid var(--border-color);
-    color: var(--text-primary);
-    font-size: 1.2rem;
-    border-radius: 4px;
-    font-family: inherit;
-}
+                    <h2>📚 Referencias</h2>
+                    <ul>
+                        <li><a href="https://msrc.microsoft.com/" style="color: var(--text-secondary);">Microsoft Security Bulletin</a></li>
+                        <li><a href="https://www.exploit-db.com/" style="color: var(--text-secondary);">Exploit-DB</a></li>
+                    </ul>
+                `
+            },
+            {
+                id: 2,
+                title: "Post de Prueba - Mi primer POC",
+                date: "09/09/2026",
+                categories: ["Linux", "Test"],
+                tags: ["test", "linux", "prueba", "bash"],
+                cve: "",
+                excerpt: "Este es un post de prueba para verificar que la funcionalidad está funcionando correctamente.",
+                content: `
+                    <h2>🧪 Post de Prueba</h2>
+                    <p>Este es un post de prueba para verificar que la funcionalidad está funcionando correctamente.</p>
 
-#search-input:focus {
-    outline: none;
-    box-shadow: 0 0 20px rgba(0, 255, 65, 0.2);
-}
+                    <h3>Comandos de prueba</h3>
+                    <pre><code>echo "Hola mundo"
+                    ls -la
+                    uname -a</code></pre>
 
-#search-results {
-    margin-top: 20px;
-}
+                    <h3>Script de ejemplo</h3>
+                    <pre><code>#!/bin/bash
+                    # Script de prueba
+                    echo "Este es un script de ejemplo"
+                    for i in {1..5}; do
+                        echo "Iteración \$i"
+                    done</code></pre>
+                `
+            }
+        ];
 
-.category-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
-    margin: 20px 0;
-}
+        // ============================================
+        // FUNCIONES DE RENDERIZADO
+        // ============================================
 
-.category-tag {
-    background: var(--bg-secondary);
-    padding: 15px;
-    text-align: center;
-    border: 1px solid var(--border-color);
-    border-radius: 4px;
-    color: var(--text-primary);
-    text-decoration: none;
-    transition: all 0.3s;
-}
+        function renderPosts(postsToShow) {
+            const container = document.getElementById('posts-container');
+            if (!container) return;
 
-.category-tag:hover {
-    background: var(--text-primary);
-    color: var(--bg-primary);
-    transform: translateY(-2px);
-}
+            if (postsToShow.length === 0) {
+                container.innerHTML = `<p style="text-align: center; color: var(--text-secondary); padding: 40px 0;">📝 No hay POCs disponibles con esos filtros.</p>`;
+                return;
+            }
 
-.post-preview {
-    background: var(--bg-secondary);
-    padding: 25px;
-    margin-bottom: 20px;
-    border-radius: 8px;
-    border-left: 4px solid var(--border-color);
-}
+            container.innerHTML = postsToShow.map(post => `
+                <article class="post-preview" data-title="${post.title}" data-tags="${post.tags.join(' ')}" data-category="${post.categories.join(' ')}">
+                    <h3><a href="#" onclick="showPost(${post.id}); return false;">${post.title}</a></h3>
+                    <div class="post-meta">
+                        <span class="date">📅 ${post.date}</span>
+                        <span class="category">🏷️ ${post.categories.join(', ')}</span>
+                        ${post.cve ? `<span class="cve-badge">🔴 ${post.cve}</span>` : ''}
+                    </div>
+                    <p>${post.excerpt}</p>
+                    <div class="tags">
+                        ${post.tags.map(tag => `<span class="tag">#${tag}</span>`).join('')}
+                    </div>
+                </article>
+            `).join('');
+        }
 
-.post-preview h3 a {
-    color: var(--text-primary);
-    text-decoration: none;
-    font-size: 1.5rem;
-}
+        // ============================================
+        // FUNCIONES DE BÚSQUEDA Y FILTROS
+        // ============================================
 
-.post-preview h3 a:hover {
-    text-decoration: underline;
-}
+        function searchPosts(query) {
+            const q = query.toLowerCase().trim();
+            const resultsContainer = document.getElementById('search-results');
 
-.post-meta {
-    display: flex;
-    gap: 20px;
-    margin: 10px 0;
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-}
+            if (!q) {
+                resultsContainer.innerHTML = '';
+                renderPosts(posts);
+                return;
+            }
 
-.tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-}
+            const results = posts.filter(post => {
+                const searchable = [
+                    post.title,
+                    post.excerpt,
+                    ...post.tags,
+                    ...post.categories,
+                    post.cve || ''
+                ].join(' ').toLowerCase();
+                return searchable.includes(q);
+            });
 
-.tag {
-    background: rgba(0, 255, 65, 0.1);
-    padding: 4px 12px;
-    border-radius: 15px;
-    font-size: 0.8rem;
-    border: 1px solid rgba(0, 255, 65, 0.3);
-}
-</style>
+            renderPosts(results);
 
-<script>
-const searchInput = document.getElementById('search-input');
-const resultsContainer = document.getElementById('search-results');
-let allPosts = [];
+            if (results.length === 0) {
+                resultsContainer.innerHTML = `<div style="text-align: center; color: var(--text-secondary); padding: 20px; border: 1px solid var(--border-color); margin-top: 20px;">🔍 No se encontraron resultados para "${q}"</div>`;
+            } else {
+                resultsContainer.innerHTML = `<div style="background: rgba(0,255,65,0.05); border: 1px solid var(--border-color); padding: 10px; margin-top: 20px; text-align: center; color: var(--text-secondary);">🎯 ${results.length} resultados encontrados</div>`;
+            }
+        }
 
-function indexPosts() {
-    const postElements = document.querySelectorAll('.post-preview');
-    allPosts = Array.from(postElements).map(el => {
-        return {
-            title: el.dataset.title || '',
-            excerpt: el.dataset.excerpt || '',
-            tags: (el.dataset.tags || '').split(' '),
-            category: el.dataset.category || '',
-            element: el
-        };
-    });
-}
+        function filterCategory(category) {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+            const results = posts.filter(post =>
+                post.categories.some(c => c.toLowerCase().includes(category.toLowerCase()))
+            );
+            renderPosts(results);
+        }
 
-function search(query) {
-    query = query.toLowerCase().trim();
-    
-    if (!query) {
-        resultsContainer.innerHTML = '';
-        allPosts.forEach(p => p.element.style.display = 'block');
-        return;
-    }
-    
-    const results = allPosts.filter(post => {
-        const searchable = [
-            post.title,
-            post.excerpt,
-            ...post.tags,
-            post.category
-        ].join(' ').toLowerCase();
-        return searchable.includes(query);
-    });
-    
-    allPosts.forEach(p => p.element.style.display = 'none');
-    results.forEach(r => r.element.style.display = 'block');
-    
-    if (results.length === 0) {
-        resultsContainer.innerHTML = `
-            <div style="text-align: center; color: var(--text-secondary); padding: 20px; border: 1px solid var(--border-color); margin-top: 20px;">
-                🔍 No se encontraron resultados para "${query}"
-            </div>
-        `;
-    } else {
-        resultsContainer.innerHTML = `
-            <div style="background: rgba(0,255,65,0.05); border: 1px solid var(--border-color); padding: 10px; margin-top: 20px; text-align: center; color: var(--text-secondary);">
-                🎯 ${results.length} resultados encontrados
-            </div>
-        `;
-    }
-}
+        function showAllPosts() {
+            document.getElementById('search-input').value = '';
+            document.getElementById('search-results').innerHTML = '';
+            renderPosts(posts);
+        }
 
-if (searchInput) {
-    searchInput.addEventListener('input', function() {
-        search(this.value);
-    });
-}
+        // ============================================
+        // FUNCIÓN PARA MOSTRAR POST COMPLETO
+        // ============================================
 
-document.addEventListener('DOMContentLoaded', indexPosts);
-</script>
+        function showPost(id) {
+            const post = posts.find(p => p.id === id);
+            if (!post) return;
+
+            const container = document.getElementById('posts-container');
+            container.innerHTML = `
+                <div class="post-content">
+                    <h1>${post.title}</h1>
+                    <div class="post-meta">
+                        <span>📅 ${post.date}</span>
+                        <span>🏷️ ${post.categories.join(', ')}</span>
+                        ${post.cve ? `<span class="cve-badge">🔴 ${post.cve}</span>` : ''}
+                    </div>
+                    ${post.content}
+                </div>
+                <button class="back-btn" onclick="showAllPosts()">← Volver a todos los posts</button>
+            `;
+
+            // Agregar botones de copiar a los bloques de código
+            document.querySelectorAll('.post-content pre').forEach(pre => {
+                const button = document.createElement('button');
+                button.className = 'copy-btn';
+                button.textContent = '📋 Copiar';
+                button.onclick = function() {
+                    const code = this.parentElement.querySelector('code');
+                    if (code) {
+                        navigator.clipboard.writeText(code.textContent);
+                        this.textContent = '✅ Copiado!';
+                        setTimeout(() => { this.textContent = '📋 Copiar'; }, 2000);
+                    }
+                };
+                pre.appendChild(button);
+            });
+
+            window.scrollTo(0, 0);
+        }
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderPosts(posts);
+        });
+    </script>
+</body>
+</html>
