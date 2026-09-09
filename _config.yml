@@ -1,8 +1,8 @@
 title: "POCs & Security Research"
 description: "Investigación de vulnerabilidades y pruebas de concepto"
-url: "https://poc.github.io"
-baseurl: ""
-github_username:  tu-usuario
+url: "https://botache500.github.io"
+baseurl: "/poc.github.io"
+github_username: botache500
 
 # Configuración del tema
 remote_theme: pages-themes/cayman@v0.2.0
@@ -20,3 +20,7 @@ collections:
 
 # Búsqueda
 search_enabled: true
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
