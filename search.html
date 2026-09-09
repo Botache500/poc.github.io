@@ -1,1 +1,114 @@
+---
+layout: default
+title: Búsqueda
+---
 
+<h1>🔍 Buscador de POCs</h1>
+
+<div class="search-container">
+    <input type="text" id="search-input" placeholder="🔍 Buscar por CVE, herramienta, sistema...">
+    <div id="search-results"></div>
+</div>
+
+<div id="all-posts">
+    {% for post in site.posts %}
+    <article class="post-preview" data-title="{{ post.title }}" data-excerpt="{{ post.excerpt | strip_html }}" data-tags="{{ post.tags | join: ' ' }}" data-category="{{ post.categories | join: ' ' }}">
+        <h3><a href="{{ post.url }}">{{ post.title }}</a></h3>
+        <div class="post-meta">
+            <span>📅 {{ post.date | date: "%d/%m/%Y" }}</span>
+            <span>🏷️ {{ post.categories | join: ", " }}</span>
+        </div>
+        <p>{{ post.excerpt | strip_html | truncatewords: 20 }}</p>
+        <div class="tags">
+            {% for tag in post.tags %}
+            <span class="tag">#{{ tag }}</span>
+            {% endfor %}
+        </div>
+    </article>
+    {% endfor %}
+</div>
+
+<style>
+.post-preview {
+    background: var(--bg-secondary);
+    padding: 25px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    border-left: 4px solid var(--border-color);
+}
+
+.post-preview h3 a {
+    color: var(--text-primary);
+    text-decoration: none;
+    font-size: 1.5rem;
+}
+
+.post-preview h3 a:hover {
+    text-decoration: underline;
+}
+</style>
+
+<script>
+const searchInput = document.getElementById('search-input');
+const resultsContainer = document.getElementById('search-results');
+const allPosts = document.getElementById('all-posts');
+let posts = [];
+
+function indexPosts() {
+    const postElements = document.querySelectorAll('.post-preview');
+    posts = Array.from(postElements).map(el => {
+        return {
+            title: el.dataset.title || '',
+            excerpt: el.dataset.excerpt || '',
+            tags: (el.dataset.tags || '').split(' '),
+            category: el.dataset.category || '',
+            element: el
+        };
+    });
+}
+
+function search(query) {
+    query = query.toLowerCase().trim();
+    
+    if (!query) {
+        resultsContainer.innerHTML = '';
+        posts.forEach(p => p.element.style.display = 'block');
+        return;
+    }
+    
+    const results = posts.filter(post => {
+        const searchable = [
+            post.title,
+            post.excerpt,
+            ...post.tags,
+            post.category
+        ].join(' ').toLowerCase();
+        return searchable.includes(query);
+    });
+    
+    posts.forEach(p => p.element.style.display = 'none');
+    results.forEach(r => r.element.style.display = 'block');
+    
+    if (results.length === 0) {
+        resultsContainer.innerHTML = `
+            <div style="text-align: center; color: var(--text-secondary); padding: 20px; border: 1px solid var(--border-color); margin: 20px 0;">
+                🔍 No se encontraron resultados para "${query}"
+            </div>
+        `;
+    } else {
+        resultsContainer.innerHTML = `
+            <div style="background: rgba(0,255,65,0.05); border: 1px solid var(--border-color); padding: 10px; margin: 20px 0; text-align: center; color: var(--text-secondary);">
+                🎯 ${results.length} resultados encontrados
+            </div>
+        `;
+    }
+}
+
+if (searchInput) {
+    searchInput.addEventListener('input', function() {
+        search(this.value);
+    });
+}
+
+document.addEventListener('DOMContentLoaded', indexPosts);
+</script>
