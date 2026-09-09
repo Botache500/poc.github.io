@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVE-2024-1234 - Escalada de Privilegios en Windows</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <nav>
+                <a href="../../index.html">🏠 Inicio</a>
+                <a href="../../search.html">🔍 Buscar</a>
+                <a href="https://github.com/botache500">📂 GitHub</a>
+            </nav>
+        </header>
+
+        <article class="post-content">
+            <h1>CVE-2024-1234 - Escalada de Privilegios en Windows</h1>
+            
+            <div class="post-meta">
+                <span>📅 15/09/2026</span>
+                <span>🏷️ Windows, CVE</span>
+                <span class="cve-badge">🔴 CVE-2024-1234</span>
+            </div>
+
+            <div class="toc">
+                <h3>📑 Tabla de contenido</h3>
+                <ul>
+                    <li><a href="#descripcion">📋 Descripción</a></li>
+                    <li><a href="#laboratorio">🛠️ Laboratorio</a></li>
+                    <li><a href="#explotacion">💥 Explotación</a></li>
+                    <li><a href="#evidencia">📸 Evidencia</a></li>
+                    <li><a href="#mitigacion">🛡️ Mitigación</a></li>
+                    <li><a href="#referencias">📚 Referencias</a></li>
+                </ul>
+            </div>
+
+            <h2 id="descripcion">📋 Descripción</h2>
+            <p>Esta vulnerabilidad afecta al componente <strong>Windows Kernel</strong> y permite a un atacante local escalar privilegios de un usuario normal a <strong>NT AUTHORITY\SYSTEM</strong>.</p>
+
+            <h3>🔍 Detalles técnicos</h3>
+            <ul>
+                <li><strong>CVE</strong>: CVE-2024-1234</li>
+                <li><strong>Sistemas afectados</strong>: Windows 10/11 (versiones 21H2 - 23H2)</li>
+                <li><strong>Tipo</strong>: Elevación de Privilegios</li>
+                <li><strong>Gravedad</strong>: 7.8 (Alta)</li>
+            </ul>
+
+            <h2 id="laboratorio">🛠️ Laboratorio</h2>
+            <h3>Configuración necesaria</h3>
+            
+            <div class="lab-setup">
+                <div class="target">
+                    <h4>🎯 Máquina objetivo</h4>
+                    <ul>
+                        <li>Windows 10 22H2</li>
+                        <li>Usuario: testuser</li>
+                        <li>Sin parches de seguridad</li>
+                    </ul>
+                </div>
+                <div class="attacker">
+                    <h4>💻 Atacante</h4>
+                    <ul>
+                        <li>Kali Linux 2024.1</li>
+                        <li>IP: 192.168.1.10</li>
+                    </ul>
+                </div>
+            </div>
+
+            <h2 id="explotacion">💥 Explotación paso a paso</h2>
+
+            <h3>Paso 1: Verificar permisos</h3>
+            <p>En la máquina objetivo, ejecuta:</p>
+            <pre><code>whoami /priv</code></pre>
+            <p>Debe mostrar <code>SE_PRIVILEGE_ENABLED</code> para el privilegio SeImpersonatePrivilege.</p>
+
+            <h3>Paso 2: Compilar el exploit</h3>
+            <p>En Kali Linux, compila el exploit:</p>
+            <pre><code>gcc -o exploit.exe exploit.c -lws2_32</code></pre>
+
+            <h3>Paso 3: Transferir y ejecutar</h3>
+            <p>Transfiere el exploit a Windows y ejecuta:</p>
+            <pre><code>.\exploit.exe</code></pre>
+
+            <h3>Resultado esperado</h3>
+            <pre><code>[*] Iniciando exploit...
+[+] Token duplicado exitosamente
+[+] Shell SYSTEM obtenida</code></pre>
+
+            <h2 id="mitigacion">🛡️ Mitigación</h2>
+            <ol>
+                <li>Aplicar el parche KB5012345 de Microsoft</li>
+                <li>Deshabilitar la cuenta de invitado</li>
+                <li>Limitar los permisos de usuarios locales</li>
+                <li>Implementar LSA Protection</li>
+                <li>Monitorear eventos de seguridad (ID 4624, 4672)</li>
+            </ol>
+
+            <h2 id="referencias">📚 Referencias</h2>
+            <ul>
+                <li><a href="https://msrc.microsoft.com/" target="_blank">Microsoft Security Bulletin</a></li>
+                <li><a href="https://www.exploit-db.com/" target="_blank">Exploit-DB</a></li>
+                <li><a href="https://cve.mitre.org/" target="_blank">CVE MITRE</a></li>
+            </ul>
+
+            <div class="post-footer">
+                <button class="back-btn" onclick="window.location.href='../../index.html'">← Volver al inicio</button>
+            </div>
+        </article>
+
+        <footer>
+            <p>POCs & Security Research es mantenido por botache500</p>
+            <p>⚡ Generado con GitHub Pages</p>
+        </footer>
+    </div>
+
+    <script src="../../assets/js/main.js"></script>
+</body>
+</html>
